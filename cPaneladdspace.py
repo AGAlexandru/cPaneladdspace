@@ -1,5 +1,4 @@
 #!/usr/bin/python
-users=open('users.txt','w')
 import commands
 import re
 home2 = 0
@@ -24,41 +23,26 @@ if home2 == 1:
 			home2 = 0
 ids = commands.getoutput("ls -lh /home | awk {'print $3'}")
 ids = ids.split( )
-for id in ids:
-	if id != "root":
-		acc = commands.getoutput("whmapi1 accountsummary user="+id)
-		if "reason: OK" in acc:
-			disklimit = re.findall('disklimit: (.*?)M', acc)
-			disklimit = disklimit[0]
-			disklimit = int(disklimit)
-			diskused = re.findall('diskused: (.*?)M', acc)
-			diskused = diskused[0]
-			diskused = int(diskused)
-			diskfree = disklimit - diskused
-			newdisk = disklimit + 1000     
-			newdisk = str(newdisk)1
-			if diskfree <= 200:
-				ndiskcommand = "whmapi1 editquota user=" + id + " quota=" + newdisk
-				commands.getoutput(ndiskcommand)        
-				users.write(id +" " + newdisk +"\n")
+def check_quota():
+	for id in ids:
+		if id != "root":
+			acc = commands.getoutput("whmapi1 accountsummary user="+id)
+			if "reason: OK" in acc:
+				disklimit = re.findall('disklimit: (.*?)M', acc)
+				disklimit = disklimit[0]
+				disklimit = int(disklimit)
+				diskused = re.findall('diskused: (.*?)M', acc)
+				diskused = diskused[0]
+				diskused = int(diskused)
+				diskfree = disklimit - diskused
+				newdisk = disklimit + 1000     
+				newdisk = str(newdisk)1
+				if diskfree <= 200:
+					ndiskcommand = "whmapi1 editquota user=" + id + " quota=" + newdisk
+					commands.getoutput(ndiskcommand)
+check_quota()
 if home2 == 1:
 	ids = commands.getoutput("ls -lh /home2 | awk {'print $3'}")
 	ids = ids.split( )
-	for id in ids:
-			if id != "root":
-					acc = commands.getoutput("whmapi1 accountsummary user="+id)
-					if "reason: OK" in acc:
-							disklimit = re.findall('disklimit: (.*?)M', acc)
-							disklimit = disklimit[0]
-							disklimit = int(disklimit)
-							diskused = re.findall('diskused: (.*?)M', acc)
-							diskused = diskused[0]
-							diskused = int(diskused)
-							diskfree = disklimit - diskused         
-							newdisk = disklimit + 1000
-							newdisk = str(newdisk)
-							if diskfree <= 200:
-									ndiskcommand = "whmapi1 editquota user=" + id + " quota=" + newdisk
-									commands.getoutput(ndiskcommand)
-									users.write(id + "\n")
+	check_quota()
 #github.com/AGAlexandru/
