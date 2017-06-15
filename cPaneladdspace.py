@@ -35,7 +35,7 @@ for id in ids:
 			diskused = diskused[0]
 			diskused = int(diskused)
 			diskfree = disklimit - diskused
-			newdisk = disklimit + 10000     
+			newdisk = disklimit + 1000     
 			newdisk = str(newdisk)1
 			if diskfree <= 200:
 				ndiskcommand = "whmapi1 editquota user=" + id + " quota=" + newdisk
@@ -55,7 +55,7 @@ if home2 == 1:
 							diskused = diskused[0]
 							diskused = int(diskused)
 							diskfree = disklimit - diskused         
-							newdisk = disklimit + 10000
+							newdisk = disklimit + 1000
 							newdisk = str(newdisk)
 							if diskfree <= 200:
 									ndiskcommand = "whmapi1 editquota user=" + id + " quota=" + newdisk
