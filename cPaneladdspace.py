@@ -2,9 +2,9 @@
 import commands
 import re
 home2 = 0
-if "home2" in commands.getoutput("df -h"):
+if "home2" in commands.getoutput("ls -l / | awk {'print $9'}"):
 	home2 = 1
-homesize = commands.getoutput("df -h| grep /home | awk {'print $5'}")
+homesize = commands.getoutput("df -h /home | awk {'print $5'} | grep -v Use")
 homesize = re.findall('(.*?)%', homesize)
 homesize = homesize[0]
 homesize = int(homesize)
@@ -12,7 +12,7 @@ if homesize >= 95:
 	if home2 == 0:
 		exit()
 if home2 == 1:
-	home2size = commands.getoutput("df -h| grep /home2 | awk {'print $5'}")
+	home2size = commands.getoutput("df -h /home2 | awk {'print $5'} | grep -v Use")
 	home2size = re.findall('(.*?)%', home2size)
 	home2size = home2size[0]
 	home2size = int(home2size)
@@ -36,7 +36,7 @@ def check_quota():
 				diskused = int(diskused)
 				diskfree = disklimit - diskused
 				newdisk = disklimit + 1000     
-				newdisk = str(newdisk)1
+				newdisk = str(newdisk)
 				if diskfree <= 200:
 					ndiskcommand = "whmapi1 editquota user=" + id + " quota=" + newdisk
 					commands.getoutput(ndiskcommand)
