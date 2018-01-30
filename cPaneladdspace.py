@@ -45,4 +45,3 @@ if home2 == 1:
 	ids = commands.getoutput("ls -lh /home2 | awk {'print $3'}")
 	ids = ids.split( )
 	check_quota()
-#github.com/AGAlexandru/
